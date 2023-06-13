@@ -1,4 +1,5 @@
 using DataAccess;
+using WebApi.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<VotingApplicationContext>(options =>
     var config = builder.Configuration;
     options.UseSqlServer(config.GetConnectionString("Default")!);
 });
+builder.Services.AddWebRepositories();
+builder.Services.AddWebServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

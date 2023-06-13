@@ -2,8 +2,8 @@
 
 #nullable disable
 
-namespace DataAccess.Migrations
-{
+namespace DataAccess.Migrations { 
+
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
