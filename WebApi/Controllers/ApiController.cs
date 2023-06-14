@@ -18,18 +18,21 @@ namespace WebApi.Controllers
         [HttpPost("createPoll")]
         public async Task<IActionResult> CreatePollAsync(PollModel pollModel)
         {
+            if(!ModelState.IsValid) return BadRequest(ModelState);
             await _pollService.CreatePollAsync(pollModel.ToPollDto());
             return Ok();
         }
         [HttpPost("poll")]
         public async Task<IActionResult> VoteAsync(VoteModel voteModel)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _pollService.VoteAsync(voteModel.PollId,voteModel.ChoiceId);
             return result ? Ok() : BadRequest();
         }
         [HttpPost("getResult")]
         public IActionResult GetResult(int pollId)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = _pollService.GetResult(pollId);
             return result is null ? BadRequest() : Ok(result);
         }
