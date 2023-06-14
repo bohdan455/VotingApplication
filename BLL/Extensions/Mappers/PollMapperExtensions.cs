@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Extensions.Mappers
 {
-    public static class PollMapper
+    public static class PollMapperExtensions
     {
         public static Poll ToPoll(this PollDto dto)
         {
