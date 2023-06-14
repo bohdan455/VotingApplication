@@ -1,15 +1,16 @@
 ﻿using BLL.Dto;
 using BLL.Extensions.Mappers;
+using DataAccess.Repositories.Intefaces;
 using DataAccess.Repositories.Realisations.Main;
 
 namespace BLL.Services
 {
     public class PollService
     {
-        private readonly PollRepository _pollRepository;
-        private readonly ChoiceRepository _choiceRepository;
+        private readonly IPollRepository _pollRepository;
+        private readonly IChoiceRepository _choiceRepository;
 
-        public PollService(PollRepository pollRepository, ChoiceRepository choiceRepository)
+        public PollService(IPollRepository pollRepository, IChoiceRepository choiceRepository)
         {
             _pollRepository = pollRepository;
             _choiceRepository = choiceRepository;
