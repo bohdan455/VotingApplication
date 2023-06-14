@@ -10,6 +10,6 @@ namespace BLL.Dto
     {
         public string Name { get; set; } = string.Empty;
         public int NumberOfVotes { get; set; }
-        public double Percent { get; set; }
+        public decimal Percent { get; set; }
     }
 }

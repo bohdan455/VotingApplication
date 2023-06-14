@@ -36,33 +36,36 @@ namespace BLL.Services
         public ResultsDto GetResult(int pollId)
         {
             var poll = _pollRepository.GetByCondition(p => p.Id == pollId).FirstOrDefault();
+            if (poll == null) return null;
+
             var choicesTotalNumberOfVoted = _choiceRepository.GetByCondition(c => c.PollId == pollId).Sum(c => c.NumberOfVoted);
+            ResultsDto pollResult = null;
 
             if (choicesTotalNumberOfVoted == 0)
             {
-                var pollResult = poll.Select(p => new ResultsDto
+                pollResult = new ResultsDto
                 {
-                    PollName = p.PollName,
-                    Choices = p.Choices.Select(c => new ChoiceResultDto
+                    PollName = poll.PollName,
+                    Choices = poll.Choices.Select(c => new ChoiceResultDto
                     {
                         Name = c.ChoiceText,
                         NumberOfVotes = c.NumberOfVoted,
                         Percent = 0
                     })
-                });
+                };
             }
             else
             {
-                var pollResult = poll .Select(p => new ResultsDto
+                pollResult = new ResultsDto
                 {
-                    PollName = p.PollName,
-                    Choices = p.Choices.Select(c => new ChoiceResultDto
+                    PollName = poll.PollName,
+                    Choices = poll.Choices.Select(c => new ChoiceResultDto
                     {
                         Name = c.ChoiceText,
                         NumberOfVotes = c.NumberOfVoted,
                         Percent = c.NumberOfVoted / choicesTotalNumberOfVoted * 100
                     })
-                });
+                };
             }
             return pollResult;
         }
