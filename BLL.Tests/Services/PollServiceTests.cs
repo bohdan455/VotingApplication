@@ -169,23 +169,5 @@ namespace BLL.Tests.Services
 
 
         }
-        //public ResultsDto? GetResult(int pollId)
-        //{
-        //    var poll = _pollRepository.GetFirstByCondition(p => p.Id == pollId);
-        //    if (poll == null) return null;
-
-        //    var choicesTotalNumberOfVoted = _choiceRepository.SumByCondition(c => c.PollId == pollId, c => c.NumberOfVoted);
-        //    ResultsDto pollResult = new ResultsDto
-        //    {
-        //        PollName = poll.PollName,
-        //        Choices = poll.Choices.Select(c => new ChoiceResultDto
-        //        {
-        //            Name = c.ChoiceText,
-        //            NumberOfVotes = c.NumberOfVoted,
-        //            Percent = choicesTotalNumberOfVoted == 0 ? 0 : c.NumberOfVoted / choicesTotalNumberOfVoted * 100
-        //        })
-        //    };
-        //    return pollResult;
-        //}
     }
 }
