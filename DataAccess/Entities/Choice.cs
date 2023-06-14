@@ -12,6 +12,8 @@ namespace DataAccess.Entities
         [Key]
         public int Id { get; set; }
         [Required]
+        public int RelativeId { get; set; }
+        [Required]
         [MaxLength(255)]
         public string ChoiceText { get; set; } = string.Empty;
         [Required]
