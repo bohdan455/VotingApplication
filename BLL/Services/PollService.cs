@@ -3,6 +3,7 @@ using BLL.Extensions.Mappers;
 using BLL.Services.Intefaces;
 using DataAccess.Repositories.Intefaces;
 using DataAccess.Repositories.Realisations.Main;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -37,7 +38,7 @@ namespace BLL.Services
         }
         public ResultsDto? GetResult(int pollId)
         {
-            var poll = _pollRepository.GetFirstByCondition(p => p.Id == pollId);
+            var poll = _pollRepository.GetFirstByCondition(pr => pr.Id == pollId,pr => pr.Include(p => p.Choices));
             if (poll is null) return null;
 
             var choicesTotalNumberOfVoted = _choiceRepository.GetSumByCondition(c => c.PollId == pollId, c => c.NumberOfVoted);
@@ -48,7 +49,7 @@ namespace BLL.Services
                 {
                     Name = c.ChoiceText,
                     NumberOfVotes = c.NumberOfVoted,
-                    Percent = choicesTotalNumberOfVoted == 0 ? 0 : c.NumberOfVoted / choicesTotalNumberOfVoted * 100
+                    Percent = choicesTotalNumberOfVoted == 0 ? 0 : c.NumberOfVoted / choicesTotalNumberOfVoted * 100,
                 })
             };
             return pollResult;

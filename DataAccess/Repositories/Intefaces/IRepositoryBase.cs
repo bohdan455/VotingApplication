@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Expressions;
 
 namespace DataAccess.Repositories.Intefaces
 {
@@ -9,10 +10,11 @@ namespace DataAccess.Repositories.Intefaces
         Task AddRangeAsync(IEnumerable<T> entities);
         void Delete(T entity);
         Task DeleteAsync(T entity);
-        IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression);
-        T GetFirstByCondition(Expression<Func<T, bool>> expression);
+        IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+        T? GetFirstByCondition(Expression<Func<T, bool>> expression, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+        IQueryable<T> GetQuery(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
+        decimal GetSumByCondition(Expression<Func<T, bool>> expression, Expression<Func<T, decimal>> sum, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
         IQueryable<T> Include(params Expression<Func<T, object>>[] includes);
-        decimal GetSumByCondition(Expression<Func<T, bool>> expression, Expression<Func<T, decimal>> sum);
         void Update(T entity);
         Task UpdateAsync(T entity);
     }

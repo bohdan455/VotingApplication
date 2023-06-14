@@ -2,6 +2,7 @@
 using BLL.Services;
 using DataAccess.Entities;
 using DataAccess.Repositories.Intefaces;
+using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,8 @@ namespace BLL.Tests.Services
         public async Task Try_To_Vote_With_NonExistent_PollId_Or_ChoiceId()
         {
             // Arrange
-            _choiceRepository.Setup(cr => cr.GetFirstByCondition(It.IsAny<Expression<Func<Choice, bool>>>())).Returns<Choice>(null);
+            _choiceRepository.Setup(cr => cr.GetFirstByCondition(It.IsAny<Expression<Func<Choice, bool>>>(),
+                It.IsAny<Func<IQueryable<Choice>,IIncludableQueryable<Choice,object>>>())).Returns<Choice>(null);
 
             // Act
             var result = await _sut.VoteAsync(0, 0);
@@ -73,7 +75,9 @@ namespace BLL.Tests.Services
                 NumberOfVoted = initialNumberOfVoted
             };
 
-            _choiceRepository.Setup(cr => cr.GetFirstByCondition(It.IsAny<Expression<Func<Choice, bool>>>())).Returns(choice);
+            _choiceRepository.Setup(cr => cr.GetFirstByCondition(It.IsAny<Expression<Func<Choice, bool>>>(),
+                It.IsAny<Func<IQueryable<Choice>, IIncludableQueryable<Choice, object>>>()))
+                .Returns(choice);
             _choiceRepository.Setup(cr => cr.UpdateAsync(It.IsAny<Choice>())).Verifiable();
 
             // Act
@@ -89,7 +93,8 @@ namespace BLL.Tests.Services
         public void Get_Result_With_NonExisting_PollId()
         {
             // Arrange
-            _pollRepository.Setup(pr => pr.GetFirstByCondition(It.IsAny<Expression<Func<Poll, bool>>>())).Returns<Poll>(null);
+            _pollRepository.Setup(pr => pr.GetFirstByCondition(It.IsAny<Expression<Func<Poll, bool>>>(),
+                It.IsAny<Func<IQueryable<Poll>, IIncludableQueryable<Poll, object>>>())).Returns<Poll>(null);
 
             // Act
             var results = _sut.GetResult(0);
@@ -113,9 +118,11 @@ namespace BLL.Tests.Services
                     }
                 }
             };
-            _pollRepository.Setup(pr => pr.GetFirstByCondition(It.IsAny<Expression<Func<Poll, bool>>>())).Returns(poll);
+            _pollRepository.Setup(pr => pr.GetFirstByCondition(It.IsAny<Expression<Func<Poll, bool>>>(), It.IsAny<Func<IQueryable<Poll>,
+                IIncludableQueryable<Poll, object>>>())).Returns(poll);
             _choiceRepository
-                .Setup(cr => cr.GetSumByCondition(It.IsAny<Expression<Func<Choice, bool>>>(), It.IsAny<Expression<Func<Choice, decimal>>>())).Returns(0);
+                .Setup(cr => cr.GetSumByCondition(It.IsAny<Expression<Func<Choice, bool>>>(),It.IsAny<Expression<Func<Choice, decimal>>>(),
+               It.IsAny<Func<IQueryable<Choice>, IIncludableQueryable<Choice, object>>>())).Returns(0);
 
             // Act
             var results = _sut.GetResult(0);
@@ -146,16 +153,19 @@ namespace BLL.Tests.Services
                     }
                 }
             };
-            _pollRepository.Setup(pr => pr.GetFirstByCondition(It.IsAny<Expression<Func<Poll, bool>>>())).Returns(poll);
+            _pollRepository.Setup(pr => pr.GetFirstByCondition(It.IsAny<Expression<Func<Poll, bool>>>(),
+                It.IsAny<Func<IQueryable<Poll>, IIncludableQueryable<Poll, object>>>())).Returns(poll);
             _choiceRepository
-                .Setup(cr => cr.GetSumByCondition(It.IsAny<Expression<Func<Choice, bool>>>(), It.IsAny<Expression<Func<Choice, decimal>>>())).Returns(4);
+                .Setup(cr => cr.GetSumByCondition(It.IsAny<Expression<Func<Choice, bool>>>(), It.IsAny<Expression<Func<Choice, decimal>>>(),
+                It.IsAny<Func<IQueryable<Choice>, IIncludableQueryable<Choice, object>>>())).Returns(4);
 
             // Act
             var results = _sut.GetResult(0);
 
             // Assert
             Assert.NotNull(results);
-            Assert.Equal(results.PollName, poll.PollName);
+            Assert.Equal(poll.PollName, results.PollName);
+            Assert.Equal(poll.Choices.First().NumberOfVoted, results.Choices.First().NumberOfVotes);
 
 
         }

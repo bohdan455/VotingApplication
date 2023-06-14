@@ -12,12 +12,14 @@ namespace BLL.Extensions.Mappers
     {
         public static Poll ToPoll(this PollDto dto)
         {
+            int index = 1;
             return new Poll
             {
                 PollName = dto.Name,
                 Choices = dto.Choices.Select(c => new Choice
                 {
-                    ChoiceText = c.Text
+                    ChoiceText = c.Text,
+                    RelativeId = index++,
                 }).ToList()
             };
         }

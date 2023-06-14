@@ -1,5 +1,7 @@
 ﻿using DataAccess.Repositories.Intefaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +19,29 @@ namespace DataAccess.Repositories.Realisations.Base
         {
             _context = context;
         }
-        public IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression)
+        public IQueryable<T>? GetQuery(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
-            return _context.Set<T>().Where(expression);
+            IQueryable<T> data = _context.Set<T>();
+            if (include is not null)
+                data = include(data);
+            if (filter is not null)
+                data = data.Where(filter);
+            return data;
         }
-        public T GetFirstByCondition(Expression<Func<T, bool>> expression)
+        public IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return _context.Set<T>().FirstOrDefault(expression);
+            return this.GetQuery(expression, include);
         }
-        public decimal GetSumByCondition(Expression<Func<T, bool>> expression,Expression<Func<T,decimal>> sum)
+        public T? GetFirstByCondition(Expression<Func<T, bool>> expression,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
-            return _context.Set<T>().Where(expression).Sum(sum);
+            return this.GetQuery(expression, include)?.FirstOrDefault();
+        }
+        public decimal GetSumByCondition(Expression<Func<T, bool>> expression, Expression<Func<T, decimal>> sum,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+        {
+            return this.GetQuery(expression, include).Sum(sum);
         }
         public void Add(T entity)
         {
@@ -61,6 +75,7 @@ namespace DataAccess.Repositories.Realisations.Base
         }
         public async Task UpdateAsync(T entity)
         {
+            _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync();
         }
         public IQueryable<T> Include(params Expression<Func<T, object>>[] includes)

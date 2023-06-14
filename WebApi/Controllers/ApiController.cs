@@ -31,7 +31,7 @@ namespace WebApi.Controllers
         public IActionResult GetResult(int pollId)
         {
             var result = _pollService.GetResult(pollId);
-            return result is null ? BadRequest() : Ok();
+            return result is null ? BadRequest() : Ok(result);
         }
     }
 }
