@@ -16,7 +16,7 @@ namespace BLL.Services
             _choiceRepository = choiceRepository;
         }
 
-        public async Task CreatePoll(PollDto pollDto)
+        public async Task CreatePollAsync(PollDto pollDto)
         {
             await _pollRepository.AddAsync(pollDto.ToPoll());
         }
@@ -26,48 +26,30 @@ namespace BLL.Services
         /// <param name="pollId">Id of poll with choice</param>
         /// <param name="choiceId">RelativeId in db</param>
         /// <returns>Returns true if voted successfully either return false</returns>
-        public async Task<bool> Vote(int pollId, int choiceId)
+        public async Task<bool> VoteAsync(int pollId, int choiceId)
         {
-            var choice = _choiceRepository.GetByCondition(c => c.PollId == pollId && c.RelativeId == choiceId).FirstOrDefault();
+            var choice = _choiceRepository.GetFirstByCondition(c => c.PollId == pollId && c.RelativeId == choiceId);
             if (choice is null) return false;
             choice.NumberOfVoted++;
             await _choiceRepository.UpdateAsync(choice);
             return true;
         }
-        public ResultsDto GetResult(int pollId)
+        public ResultsDto? GetResult(int pollId)
         {
-            var poll = _pollRepository.GetByCondition(p => p.Id == pollId).FirstOrDefault();
-            if (poll == null) return null;
+            var poll = _pollRepository.GetFirstByCondition(p => p.Id == pollId);
+            if (poll is null) return null;
 
-            var choicesTotalNumberOfVoted = _choiceRepository.GetByCondition(c => c.PollId == pollId).Sum(c => c.NumberOfVoted);
-            ResultsDto pollResult = null;
-
-            if (choicesTotalNumberOfVoted == 0)
+            var choicesTotalNumberOfVoted = _choiceRepository.GetSumByCondition(c => c.PollId == pollId, c => c.NumberOfVoted);
+            ResultsDto pollResult = new ResultsDto
             {
-                pollResult = new ResultsDto
+                PollName = poll.PollName,
+                Choices = poll.Choices.Select(c => new ChoiceResultDto
                 {
-                    PollName = poll.PollName,
-                    Choices = poll.Choices.Select(c => new ChoiceResultDto
-                    {
-                        Name = c.ChoiceText,
-                        NumberOfVotes = c.NumberOfVoted,
-                        Percent = 0
-                    })
-                };
-            }
-            else
-            {
-                pollResult = new ResultsDto
-                {
-                    PollName = poll.PollName,
-                    Choices = poll.Choices.Select(c => new ChoiceResultDto
-                    {
-                        Name = c.ChoiceText,
-                        NumberOfVotes = c.NumberOfVoted,
-                        Percent = c.NumberOfVoted / choicesTotalNumberOfVoted * 100
-                    })
-                };
-            }
+                    Name = c.ChoiceText,
+                    NumberOfVotes = c.NumberOfVoted,
+                    Percent = choicesTotalNumberOfVoted == 0 ? 0 : c.NumberOfVoted / choicesTotalNumberOfVoted * 100
+                })
+            };
             return pollResult;
         }
     }

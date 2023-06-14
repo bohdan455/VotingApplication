@@ -21,6 +21,14 @@ namespace DataAccess.Repositories.Realisations.Base
         {
             return _context.Set<T>().Where(expression);
         }
+        public T GetFirstByCondition(Expression<Func<T, bool>> expression)
+        {
+            return _context.Set<T>().FirstOrDefault(expression);
+        }
+        public decimal GetSumByCondition(Expression<Func<T, bool>> expression,Expression<Func<T,decimal>> sum)
+        {
+            return _context.Set<T>().Where(expression).Sum(sum);
+        }
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);

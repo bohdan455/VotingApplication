@@ -10,7 +10,9 @@ namespace DataAccess.Repositories.Intefaces
         void Delete(T entity);
         Task DeleteAsync(T entity);
         IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression);
+        T GetFirstByCondition(Expression<Func<T, bool>> expression);
         IQueryable<T> Include(params Expression<Func<T, object>>[] includes);
+        decimal GetSumByCondition(Expression<Func<T, bool>> expression, Expression<Func<T, decimal>> sum);
         void Update(T entity);
         Task UpdateAsync(T entity);
     }
