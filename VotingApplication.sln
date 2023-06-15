@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{3B8BC554-0202-4750-B389-C3D4CF796C3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{3B8BC554-0202-4750-B389-C3D4CF796C3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{75F0FA79-941F-4567-A5E2-8BBEEB5F56CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{75F0FA79-941F-4567-A5E2-8BBEEB5F56CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{039F67CA-5894-48C0-ABD6-39AF38C583AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{039F67CA-5894-48C0-ABD6-39AF38C583AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.Tests", "BLL.Tests\BLL.Tests.csproj", "{458AB49A-3E5D-4CBE-8452-15F420458A71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL.Tests", "BLL.Tests\BLL.Tests.csproj", "{458AB49A-3E5D-4CBE-8452-15F420458A71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Tests", "WebApi.Tests\WebApi.Tests.csproj", "{C9E3B667-8180-4CD5-82A6-1EC427948599}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{458AB49A-3E5D-4CBE-8452-15F420458A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{458AB49A-3E5D-4CBE-8452-15F420458A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{458AB49A-3E5D-4CBE-8452-15F420458A71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9E3B667-8180-4CD5-82A6-1EC427948599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9E3B667-8180-4CD5-82A6-1EC427948599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9E3B667-8180-4CD5-82A6-1EC427948599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9E3B667-8180-4CD5-82A6-1EC427948599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
